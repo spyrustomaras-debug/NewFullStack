@@ -1,25 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import WorkerDashboard from "../src/pages/WorkerDashboard";
+import AdminDashboard from "../src/pages/AdminDashboard";
+import ProtectedRoute from "../src/routes/ProtectedRoute";
+import { useEffect } from "react";
+import { refreshAccessToken } from "./utils/auth";
 
 function App() {
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await refreshAccessToken();
+    }, 4 * 60 * 1000); // refresh every 4 minutes
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Worker-only routes */}
+        <Route
+          path="/worker-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["WORKER"]}>
+              <WorkerDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin-only routes */}
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Default route */}
+        <Route path="*" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
