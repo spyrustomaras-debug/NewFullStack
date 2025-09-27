@@ -85,27 +85,25 @@ describe("Login Component", () => {
     );
     expect(mockedNavigate).toHaveBeenCalledWith("/worker-dashboard");
   });
-});
+  });
+
+  it("shows error message when login fails", () => {
+    store = mockStore({
+      auth: { loading: false, error: "Invalid credentials" },
+    });
+    renderWithProviders(store);
+    expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+  });
+
+  it("shows loading state on button", () => {
+    store = mockStore({auth: { loading: true, error: null }});
+    renderWithProviders(store);
+    expect(screen.getByRole("button")).toHaveTextContent(/logging in/i);
+    expect(screen.getByRole("button")).toBeDisabled();
+  });
 
 });
 
-//   it("shows error message when login fails", () => {
-//     store = mockStore({
-//       auth: { loading: false, error: "Invalid credentials" },
-//     });
 
-//     renderWithProviders(store);
 
-//     expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
-//   });
 
-//   it("shows loading state on button", () => {
-//     store = mockStore({
-//       auth: { loading: true, error: null },
-//     });
-
-//     renderWithProviders(store);
-
-//     expect(screen.getByRole("button")).toHaveTextContent(/logging in/i);
-//     expect(screen.getByRole("button")).toBeDisabled();
-//   });
