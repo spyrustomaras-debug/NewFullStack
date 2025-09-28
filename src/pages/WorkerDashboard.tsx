@@ -23,8 +23,8 @@ const WorkerDashboard = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProjects());
-  }, [dispatch]);
+    if(projects.length === 0) dispatch(fetchProjects());
+  }, [dispatch, projects.length]);
 
   // Open update modal
   const handleEditClick = (project: Project) => {
