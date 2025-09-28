@@ -15,7 +15,7 @@ export interface Project {
   created_at: string;
 }
 
-interface ProjectState {
+export interface ProjectState {
   projects: Project[];
   loading: boolean;
   error: string | null;
