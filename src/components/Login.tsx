@@ -14,8 +14,20 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [validationErrors, setValidationErrors] = useState<{username?:string, password?: string}>({});
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // simple client side validation
+    const errors: {username?: string; password?: string} = {};
+    if(!username.trim()) errors.username = "Username is required";
+    if(!password.trim()) errors.password = "Password is required";
+
+    setValidationErrors(errors);
+
+    if(Object.keys(errors).length > 0) return; // Stop if validation fails
+
     const result = await dispatch(login({ username, password }));
 
     if (result.type === "auth/login/fulfilled") {
@@ -36,17 +48,31 @@ const Login = () => {
             type="text"
             placeholder="Enter your username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              if(validationErrors.username){
+                setValidationErrors((prev) => ({...prev, username: undefined}))
+              }
+            }}
           />
-
+          {validationErrors.username && (
+            <p className="input-error">{validationErrors.username}</p>
+          )}
           <label>Password</label>
           <input
             type="password"
             placeholder="Enter your password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              if(validationErrors.password) {
+                setValidationErrors((prev) => ({...prev, password:undefined}))
+              }
+            }}
           />
-
+          {validationErrors.password && (
+            <p className="input-error">{validationErrors.password}</p>
+          )}
           <button type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>

@@ -77,3 +77,11 @@ body, html {
   color: red;
   text-align: center;
 }
+
+.input-error {
+  color: #e63946;      /* red */
+  font-size: 0.85rem;  /* smaller than normal */
+  margin-top: 2px;
+  margin-bottom: 8px; /* keeps spacing consistent */
+}
+

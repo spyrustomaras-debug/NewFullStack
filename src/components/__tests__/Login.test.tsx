@@ -7,6 +7,7 @@ import { thunk } from "redux-thunk";
 import { BrowserRouter } from "react-router-dom";
 import Login from "../Login";
 import { login } from "../../features/auth/authSlice";
+import { exec } from "child_process";
 
 // Mock useNavigate
 const mockedNavigate = jest.fn();
@@ -68,23 +69,34 @@ describe("Login Component", () => {
         payload: { role: "WORKER" },
     });
 
-  renderWithProviders(store);
+    renderWithProviders(store);
 
-  const usernameInput = screen.getByPlaceholderText(/enter your username/i);
-  const passwordInput = screen.getByPlaceholderText(/enter your password/i);
-  const button = screen.getByRole("button", { name: /login/i });
+    const usernameInput = screen.getByPlaceholderText(/enter your username/i);
+    const passwordInput = screen.getByPlaceholderText(/enter your password/i);
+    const button = screen.getByRole("button", { name: /login/i });
 
-  await userEvent.type(usernameInput, "worker1");
-  await userEvent.type(passwordInput, "secret123");
+    await userEvent.type(usernameInput, "worker1");
+    await userEvent.type(passwordInput, "secret123");
 
-  fireEvent.click(button);
+    fireEvent.click(button);
 
-  await waitFor(() => {
-    expect(store.dispatch).toHaveBeenCalledWith(
-      login({ username: "worker1", password: "secret123" })
-    );
-    expect(mockedNavigate).toHaveBeenCalledWith("/worker-dashboard");
+    await waitFor(() => {
+        expect(store.dispatch).toHaveBeenCalledWith(
+        login({ username: "worker1", password: "secret123" })
+        );
+        expect(mockedNavigate).toHaveBeenCalledWith("/worker-dashboard");
+    });
   });
+  
+  it("Shows error messages if i click submit and input fields are empty", async() => {
+    store.dispatch = jest.fn(); // no need to resolve, validation blocks before dispatch
+
+    renderWithProviders(store);
+    const button = screen.getByRole("button", { name: /login/i });
+    fireEvent.click(button);
+
+    expect(await screen.findByText(/username is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
   });
 
   it("shows error message when login fails", () => {
