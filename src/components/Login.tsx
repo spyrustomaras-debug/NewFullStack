@@ -5,6 +5,7 @@ import { login } from "../features/auth/authSlice";
 import { RootState, AppDispatch } from "../app/store";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
+import { clearError } from "../features/auth/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -53,6 +54,7 @@ const Login = () => {
               if(validationErrors.username){
                 setValidationErrors((prev) => ({...prev, username: undefined}))
               }
+              if(error) dispatch(clearError());
             }}
           />
           {validationErrors.username && (
@@ -68,6 +70,7 @@ const Login = () => {
               if(validationErrors.password) {
                 setValidationErrors((prev) => ({...prev, password:undefined}))
               }
+              if(error) dispatch(clearError());
             }}
           />
           {validationErrors.password && (

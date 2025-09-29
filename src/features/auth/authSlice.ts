@@ -63,6 +63,9 @@ const authSlice = createSlice({
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
     },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // Login
@@ -96,5 +99,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, clearError } = authSlice.actions;
 export default authSlice.reducer;
