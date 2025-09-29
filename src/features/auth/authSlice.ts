@@ -6,7 +6,7 @@ interface User {
   role: string;
 }
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
   refreshToken: string | null;
   loading: boolean;
