@@ -14,7 +14,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user") || "null"),
   refreshToken: localStorage.getItem("refreshToken"),
   loading: false,
   error: null,
@@ -62,6 +62,7 @@ const authSlice = createSlice({
       state.refreshToken = null;
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user"); // ✅ clear persisted user
     },
     clearError: (state) => {
       state.error = null;
@@ -77,6 +78,8 @@ const authSlice = createSlice({
       state.loading = false;
       state.user = { username: action.payload.username, role: action.payload.role };
       state.refreshToken = action.payload.refreshToken;
+      localStorage.setItem("user", JSON.stringify(state.user));
+
     });
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
