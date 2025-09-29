@@ -6,6 +6,7 @@ import {
   deleteProject,
   updateProject,
   Project,
+  resetProjects
 } from "../features/projects/projectSlice";
 import { RootState, AppDispatch } from "../app/store";
 import Header from "../components/Header";

@@ -98,6 +98,7 @@ export const fetchProjects = createAsyncThunk<Project[]>(
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      console.log("response.data",response.data)
       return response.data; // backend already filters by worker or returns all for admin
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.detail || "Failed to fetch projects");
@@ -110,7 +111,10 @@ export const fetchProjects = createAsyncThunk<Project[]>(
 const projectSlice = createSlice({
   name: "projects",
   initialState,
-  reducers: { clearProjects: (state) => { state.projects = []; state.error = null; } },
+  reducers: { 
+    clearProjects: (state) => { state.projects = []; state.error = null; },
+    resetProjects: (state) => { state.projects = []; state.error = null; state.loading = false;} 
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createProject.pending, (state) => { state.loading = true; state.error = null; })
@@ -130,5 +134,5 @@ const projectSlice = createSlice({
 });
 
 
-export const { clearProjects } = projectSlice.actions;
+export const { clearProjects, resetProjects } = projectSlice.actions;
 export default projectSlice.reducer;

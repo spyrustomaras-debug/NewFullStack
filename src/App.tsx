@@ -9,13 +9,13 @@ import { refreshAccessToken } from "./utils/auth";
 
 function App() {
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      await refreshAccessToken();
-    }, 4 * 60 * 1000); // refresh every 4 minutes
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     await refreshAccessToken();
+  //   }, 4 * 60 * 1000); // refresh every 4 minutes
 
-    return () => clearInterval(interval); // cleanup on unmount
-  }, []);
+  //   return () => clearInterval(interval); // cleanup on unmount
+  // }, []);
 
 
   return (

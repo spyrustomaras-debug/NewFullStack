@@ -5,6 +5,7 @@ import { logout } from "../features/auth/authSlice";
 import { RootState, AppDispatch } from "../app/store";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
+import { resetProjects } from "../features/projects/projectSlice";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,6 +14,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(resetProjects());
     navigate("/login");
   };
 
